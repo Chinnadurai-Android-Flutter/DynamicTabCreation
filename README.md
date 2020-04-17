@@ -88,4 +88,4 @@ class DynamicFragment : Fragment() {
 
 
 #### Output 😍 :
-<img src="https://github.com/Chinnadurai-Android-Flutter/DynamicTabCreation/blob/master/screenshot-1587101578965.jpg" width="270" height="480"> | <img src="https://github.com/Alfaizkhan/Dynamic-Tabs-Android/blob/master/images/frg2.png" width="270" height="480">
+<img src="https://github.com/Chinnadurai-Android-Flutter/DynamicTabCreation/blob/master/screenshot-1587101578965.jpg" width="270" height="480">
