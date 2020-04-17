@@ -32,73 +32,59 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 #
-#### 2. In your MainActivity find views for TabLayout and do some arrangements for making dynamic tabs
+#### 2. In your MainActivity find views for TabLayout and make some adjustments for producing dynamic tabs
 
-            for (int k = 0; k <10; k++) {
-            tab.addTab(tab.newTab().setText("" + k));
-        }
+             for (k in 0..9) {
+                       tabLayout.addTab(tabLayout.newTab().setText("" + k))
+                   }
+                   val adapter = TabAdapter(supportFragmentManager, tabLayout!!.tabCount)
+                   viewPager!!.adapter = adapter
+                   viewPager!!.offscreenPageLimit = 1
+                   viewPager!!.addOnPageChangeListener(TabLayoutOnPageChangeListener(tabLayout))
 
-        adapter = new TabAdapter
-                (getSupportFragmentManager(), tab.getTabCount());
-        viewPager.setAdapter(adapter);
-        viewPager.setOffscreenPageLimit(1);
-        viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tab));
 #
-### Note : from the above code, this for() loop is the key to success where we are making dynamic fragments and adding them to tab layout you can make as many dynamic fragments as you want.
+### Note : From the above code, this for() loop is the key to achieving where we are performing dynamic fragments and attaching them to tab design you can make as many dynamic fragments as you require.
 
-         for (int k = 0; k <10; k++) {
-                    tab.addTab(tab.newTab().setText("" + k));
-                }
+        for (k in 0..9) {
+                               tabLayout.addTab(tabLayout.newTab().setText("" + k))
+                           }
                 
 #
-#### 3. Now we need some binding mechanism which can show our dynamically generated fragments on to the UI, here I am using a simple Fragment by the name of DynamicFragment and its addFrag() method. From our TabAdapter I am using getItem() method to pass the position of the dynamically generated fragment and we can get this position easily in the onCreateView() of our fragment
+#### 3. Now we need some binding mechanism which can give our dynamically produced fragments on to the UI, here I am using a simple Fragment by the name of DynamicFragment and its addFragment() method. From our TabAdapter, I am using getItem() method to pass the position of the dynamically generated fragment and we can get this position easily in the onCreateView() of our fragment
 
-            public class TabAdapter extends FragmentStatePagerAdapter {
 
-            int mNumOfTabs;
+class TabAdapter(fm: FragmentManager?, var mNumOfTabs: Int) : FragmentStatePagerAdapter(fm) {
+    override fun getItem(position: Int): Fragment {
+        return DynamicFragment.addFragment(position)
+    }
 
-            public TabAdapter(FragmentManager fm, int NumOfTabs) {
-                super(fm);
-                this.mNumOfTabs = NumOfTabs;
-            }
+    override fun getCount(): Int {
+        return mNumOfTabs
+    }
 
-            @Override
-            public Fragment getItem(int position) {
-                    return DynamicFragment.addfrag(position);
-            }
-
-            @Override
-            public int getCount() {
-                return mNumOfTabs;
-            }
-        }
+}
         
 #
 #### 4.Get the position of fragments and show it in the Dynamically generated fragment
 
-            public class DynamicFragment extends Fragment {
-                View view;
-                int val;
-                TextView c;
 
-                @Nullable
-                @Override
-                public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, 
-                                     @Nullable Bundle savedInstanceState) {
-                    view = inflater.inflate(R.layout.fragment_dynamic, container, false);
-                    val = getArguments().getInt("someInt", 0);
-                    c = view.findViewById(R.id.c);
-                    c.setText("Fragment - " + val);
-                    return view;
-                }
-                public static DynamicFragment addfrag(int val) {
-                    DynamicFragment fragment = new DynamicFragment();
-                    Bundle args = new Bundle();
-                    args.putInt("someInt", val);
-                    fragment.setArguments(args);
-                    return fragment;
-                }
-            }
+class DynamicFragment : Fragment() {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        val view = inflater.inflate(R.layout.fragment_dynamic, container, false)
+        view.textName?.text = "Fragment - ${arguments!!.getInt("someInt", 0)}"
+        return view
+    }
+
+    companion object {
+        fun addFragment(position: Int): DynamicFragment {
+            val fragment = DynamicFragment()
+            val args = Bundle()
+            args.putInt("someInt", position)
+            fragment.arguments = args
+            return fragment
+        }
+    }
+}
             
 ### You're Done 🤘💃 
 
